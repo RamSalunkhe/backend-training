@@ -1,8 +1,4 @@
 const express = require('express');
-const abc = require('../introduction/intro')
-const welcome = require('../logger/logger')
-const date = require('../util/helper')
-const str = require('../validator/formatter')
 const lodashModule = require('lodash')
 const router = express.Router();
 
@@ -12,15 +8,6 @@ const pairsOfcity = [['horror','The Shining'],['drama','Titanic'],['thriller','S
 
 
 router.get('/test-me', function (req, res) {
-    console.log('My batch is', abc.name)
-    abc.printName()
-    welcome.welcome()
-    date.date()
-    console.log(date.month())
-    date.info()
-    console.log(str.trim())
-    console.log(str.lower());
-    console.log(str.upper());
     console.log(lodashModule.chunk(month,4))
     console.log(lodashModule.tail(oddArr));
     const result = lodashModule.union([1,2],[2,3,4],[3,4,5]);
