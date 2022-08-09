@@ -13,6 +13,11 @@ router.get('/test-me', function (req, res) {
     res.send('My first ever api!')
 });
 
+router.get("/movies",function(req,res){
+    const movies = ["Rang de basanti", "The shining", "Lord of the rings", "Batman begins"]
+    return res.send(movies);
+})
+
 router.get("/movies/:indexNumber", function(req, res){
     const movies = ["Rang de basanti", "The shining", "Lord of the rings", "Batman begins"]
     console.log(req.params.indexNumber)
@@ -22,12 +27,11 @@ router.get("/movies/:indexNumber", function(req, res){
         //if the index is invalid send an error message
         return res.send('The index value is not correct, Please check the it')
     }
-
     //if the index was valid send the movie at that index in response
     let requiredMovie = movies[movieIndex]
     res.send(requiredMovie)
 })
-
+  
 router.get("/shoes", function(req, res){
     let queryParams = req.query
     let brand = queryParams.brand
@@ -88,7 +92,6 @@ router.get("/films/:filmId", function(req, res){
        }]
 
        let filmId = req.params.filmId
-
        //iterate all the films
        //search for a film whose id matches with the id recevied in request
        for(let i = 0; i < films.length; i++){
@@ -101,6 +104,38 @@ router.get("/films/:filmId", function(req, res){
 
        //if there is no match give an error response
        res.send("The film id doesn't match any movie")
+})
+
+router.get("/sol1",function(req, res){
+    let arr = [1,2,3,5,6,7];
+    let sum = 0;
+    for(let x in arr) {
+        sum += arr[x];
+    }
+
+    let lastDigit = arr.pop();
+    let consecutiveSum = lastDigit * (lastDigit+1) / 2;
+    let missingNum = consecutiveSum - sum;
+
+    return res.send({ data: missingNum});
+
+})
+
+router.get("/sol2",function(req, res){
+    let arr = [33,34,35,37,38];
+    let sum = 0;
+    let len = arr.length;
+    
+    for(let x in arr) {
+        sum += arr[x];
+    }
+    
+    let startNum = arr[0];
+    let lastNum = arr.pop();
+
+    let consecutiveSum = (len+1) * (startNum + lastNum) / 2;
+    let missingNum = consecutiveSum - sum;
+    res.send({data: missingNum});
 })
 
 module.exports = router;
