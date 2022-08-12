@@ -1,6 +1,7 @@
 const express = require('express');
 const myHelper = require('../util/helper')
 const underscore = require('underscore')
+const {default:mongoose} = require('mongoose');
 
 const router = express.Router();
 
@@ -192,6 +193,63 @@ let players =
     }
     
    })
+
+////////////////////// Assignment 05 ////////////////////////////
+
+let persons =[
+    {
+        name: "PK",
+        age: 10,
+        votingStatus: false
+    },
+    {
+        name: "SK",
+        age: 20,
+        votingStatus: false
+    },
+    {
+        name: "AA",
+        age: 70,
+        votingStatus: false
+    },
+    {
+        name: "SC",
+        age: 5,
+        votingStatus: false
+    },
+    {
+        name: "HO",
+        age: 40,
+        votingStatus: false
+    }
+]
+
+router.post("/getVotingStatus",function(req, res){
+    let votingAge = req.query.age;
+    let eligiblePerson = [];
+    for(let i = 0; i<persons.length; i++) {
+        if(persons[i].age > votingAge) {
+            persons[i].votingStatus = true;
+            eligiblePerson.push(persons[i]);
+        }
+    }
+    res.send({person: eligiblePerson, status: true})
+})
+
+
+
+
+
+/////////////////// Mongo DB ///////////////////////////////////
+
+mongoose.connect("mongodb+srv://Ram:pqr%4012345@cluster0.kmazbqk.mongodb.net/RamKaDB?retryWrites=true&w=majority",{
+    useNewurlparser:true
+}) 
+.then( ()=> console.log("Mongodb is connected"))
+.catch(  err => console.log(err))
+
+
+
 
 module.exports = router;
 // adding this comment for no reason
