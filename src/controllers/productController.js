@@ -1,23 +1,13 @@
-// const { count } = require("console")
-const ProductModel = require("../models/productModel")
+const ProductModel = require('../models/productModel')
 
-const createProduct = async function (req, res) {
-    let data= req.body
-
-    let savedData= await ProductModel.create(data)
-    res.send({msg: savedData})
+const createProduct = async function(req ,res){
+    const product = req.body;
+    const saveProduct = await ProductModel.create(product)
+    res.send({msg : saveProduct})
 }
-
-const getProductsData = async function (req, res) {
-    let allBooks = await ProductModel.find({ authorName: "HO" })
-    console.log(allBooks)
-    if (allBooks.length > 0) res.send({ msg: allBooks, condition: true })
-    else res.send({ msg: "No books found", condition: false })
-}
-
-
 module.exports.createProduct = createProduct
-module.exports.getProductssData = getProductsData
+
+
 // const updateBooks = async function (req, res) {
 //     let data = req.body // {sales: "1200"}
 //     // let allBooks= await BookModel.updateMany( 

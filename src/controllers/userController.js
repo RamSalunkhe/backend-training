@@ -1,18 +1,12 @@
-const UserModel = require("../models/userModel");
+const UserModel = require("../models/userModel")
 
-const createUser = async function (req, res) {
-  let data = req.body;
-  console.log(data);
-  let savedData = await UserModel.create(data);
-  console.log(savedData);
-  res.send({ msg: savedData });
-};
-
-
-module.exports.createUser = createUser;
-
-
-
+const createUser = async function(req,res){
+    const user = req.body;
+    user.isFreeAppUser = req.isAppFree
+    const saveUser = await UserModel.create(user);
+    res.send({"msg ": saveUser})
+}
+module.exports.createUser = createUser
 
 
 

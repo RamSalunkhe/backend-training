@@ -5,7 +5,7 @@ const moment = require('moment');
 const UserController= require("../controllers/userController")
 const ProductController= require("../controllers/productController")
 const OrderController = require("../controllers/orderController")
-const commonMW = require ("../middlewares/commonMiddlewares")
+const Middleware = require ("../middlewares/commonMiddlewares")
 
 
 const middle = function(req,res,next) {
@@ -22,8 +22,8 @@ router.get("/test-me",middle, function (req, res) {
 })
 
 router.post("/createProduct", ProductController.createProduct)
-router.post("/createUser", commonMW.mid1,UserController.createUser)
-router.post("/createOrder",commonMW.mid1,OrderController.createOrder)
+router.post("/createUser", Middleware.validate , UserController.createUser)
+router.post("/createOrder", Middleware.validate , OrderController.createOrder)
 
 
 

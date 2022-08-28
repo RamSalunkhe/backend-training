@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose
   .connect(
-    "mongodb+srv://RaM:OwRIzCdsaqxsYEi6@cluster0.kmazbqk.mongodb.net/RaM?retryWrites=true&w=majority",
+    "mongodb+srv://RaM:kKxxxpBHZzTaItFk@cluster0.kmazbqk.mongodb.net/RaMKaDB",
     {
       useNewUrlParser: true,
     }
@@ -19,10 +19,10 @@ mongoose
 
 app.use("/", route);
 
-app.use(function (req, res, next) {
-  console.log("inside GLOBAL MW");
-  res.send({ msg: "done" });
-});
+// app.use(function (req, res, next) {
+//   console.log("inside GLOBAL MW");
+//   res.send({ msg: "done" });
+// });
 
 app.listen(process.env.PORT || 3000, function () {
   console.log("Express app running on port " + (process.env.PORT || 3000));
