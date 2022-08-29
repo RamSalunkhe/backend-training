@@ -1,24 +1,22 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/userModel");
+const UserModel = require("../models/userModel");
 
 /*
   Read all the comments multiple times to understand why we are doing what we are doing in login api and getUserData api
 */
-const createUser = async function (abcd, xyz) {
-  //You can name the req, res objects anything.
-  //but the first parameter is always the request 
-  //the second parameter is always the response
-  let data = abcd.body;
-  let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
+const createUser = async function (req, res) {
+  let data = req.body;
+  let savedData = await UserModel.create(data);
+  console.log(req.newAtribute);
+  res.send({ msg: savedData });
 };
+
 
 const loginUser = async function (req, res) {
   let userName = req.body.emailId;
   let password = req.body.password;
 
-  let user = await userModel.findOne({ emailId: userName, password: password });
+  let user = await UserModel.findOne({ emailId: userName, password: password });
   if (!user)
     return res.send({
       status: false,
@@ -34,7 +32,7 @@ const loginUser = async function (req, res) {
   let token = jwt.sign(
     {
       userId: user._id.toString(),
-      batch: "thorium",
+      batch: "plutonium",
       organisation: "FunctionUp",
     },
     "functionup-plutonium-very-very-secret-key"
@@ -66,7 +64,7 @@ const getUserData = async function (req, res) {
     return res.send({ status: false, msg: "token is invalid" });
 
   let userId = req.params.userId;
-  let userDetails = await userModel.findById(userId);
+  let userDetails = await UserModel.findById(userId);
   if (!userDetails)
     return res.send({ status: false, msg: "No such user exists" });
 
@@ -75,24 +73,50 @@ const getUserData = async function (req, res) {
 };
 
 const updateUser = async function (req, res) {
-  // Do the same steps here:
-  // Check if the token is present
-  // Check if the token present is a valid token
-  // Return a different error message in both these cases
+ 
+  let token = req.headers['x-Auth-Token']
+  if(!token) token = req.headers['x-auth-token']
+
+  if(!token) return res.send({status: false, msg: "Token must be present"})
+
+  let decodeToken = jwt.verify(token, "functionup-plutonium-very-very-secret-key")
+  if(!decodeToken) return res.send({status: false, msg: "Invalid Token"})
+  
+
 
   let userId = req.params.userId;
-  let user = await userModel.findById(userId);
+  let user = await UserModel.findById(userId);
   //Return an error if no user with the given id exists in the db
   if (!user) {
     return res.send("No such user exists");
   }
 
   let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
+  let updatedUser = await UserModel.findOneAndUpdate({ _id: userId }, userData,{new: true});
   res.send({ status: updatedUser, data: updatedUser });
 };
+
+const deleteUser = async function (req, res) {
+
+  let token = req.headers['x-Auth-Token']
+  if(!token) token = req.headers['x-auth-token']
+
+  if(!token) return res.send({status: false, msg: "Token must be present"})
+
+  let decodeToken = jwt.verify(token, "functionup-plutonium-very-very-secret-key")
+  if(!decodeToken) return res.send({status: false, msg: "Invalid Token"})
+
+  let user = req.params.userId;
+  const isUser = await UserModel.findById(user)
+  if(!isUser){
+    return res.send("No such user exists in DB")
+  }
+  let delUser = await UserModel.findOneAndUpdate({_id: user}, {isDeleted: true},{new: true});
+  res.send({data: delUser});
+}
 
 module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.deleteUser = deleteUser;
