@@ -22,14 +22,14 @@ const authenticate = async function(req, res, next) {
     next()
 }
 
-
 const authorise = function(req, res, next) {
     // comapre the logged in user's id and the id in request
     let loggedInUser = req.decodeToken.userId;
     let userToBeModified = req.params.userId;
+    req.loggedInUser = loggedInUser;
   
     if (loggedInUser != userToBeModified)
-      return res.send("you don't have access to modify others data");
+      return res.send("User logged is not allowed to modify the requested users data");
   
     next()
 }
